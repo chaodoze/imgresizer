@@ -28,6 +28,7 @@ module.exports = async (req, res) => {
   }
   try {
     const buffer = await mFetchImage(req.url)
+    res.setHeader('Content-Type', 'image/jpeg')
     res.write(buffer)
     res.end()
   }
