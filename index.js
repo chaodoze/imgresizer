@@ -1,6 +1,5 @@
-const {send} = require('micro')
+const Koa = require('koa')
 const axios = require('axios')
-const fs = require('fs')
 const sharp = require('sharp')
 const memoize = require('memoizee')
 const querystring = require('querystring')
@@ -22,18 +21,45 @@ const fetchImage = async (requestUrl)=>{
 
 const mFetchImage = memoize(fetchImage, 1, {primitive:true, promise: true, max:1000, maxAge:1000*60*60*24})
 
-module.exports = async (req, res) => {
-  if (req.url.endsWith('.ico')) {
-    return send(res, 404)
+const app = new Koa()
+app.use(async ctx => {
+  const {request, response} = ctx
+  if (request.url == "/") {
+    console.log('hello world')
+    ctx.body = "hello world"
+    return
+  }
+  if (request.url.endsWith('.ico')) {
+    ctx.throw(404)
+    return;
   }
   try {
-    const buffer = await mFetchImage(req.url)
-    res.setHeader('Content-Type', 'image/jpeg')
-    res.write(buffer)
-    res.end()
+    const buffer = await mFetchImage(request.url)
+    ctx.set( 'Content-Type','image/jpeg')
+    ctx.body = buffer
   }
   catch(e) {
-    console.error('err', e.status, req.url)
-    return send(res, e.status)
+    console.error(e)
+    ctx.throw(e.response.status)
   }
-}
+})
+
+module.exports = app.callback()
+// module.exports = async (req, res) => {
+//   if (req.url == "/") {
+//     return send(res, 200, 'hello worldx')
+//   }
+//   if (req.url.endsWith('.ico')) {
+//     ctx.throw(404)
+//   }
+//   try {
+//     const buffer = await mFetchImage(req.url)
+//     res.setHeader('Content-Type', 'image/jpeg')
+//     res.write(buffer)
+//     res.end()
+//   }
+//   catch(e) {
+//     console.error('err', e.status, req.url)
+//     return send(res, e.status)
+//   }
+// }

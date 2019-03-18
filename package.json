@@ -12,11 +12,8 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
+    "koa": "^2.7.0",
     "memoizee": "^0.4.5",
-    "micro": "^8.0.1",
-    "sharp": "^0.18.2"
-  },
-  "devDependencies": {
-    "micro-dev": "^1.1.2"
+    "sharp": "^0.20.7"
   }
 }
