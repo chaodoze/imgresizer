@@ -36,6 +36,7 @@ app.use(async ctx => {
   try {
     const buffer = await mFetchImage(request.url)
     ctx.set( 'Content-Type','image/jpeg')
+    ctx.set('Cache-Control', 'public, max-age=2592000')
     ctx.body = buffer
   }
   catch(e) {
