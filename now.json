@@ -1,10 +1,10 @@
 {
-  "alias": "imgresizer.now.sh",
+  "alias": "imgresize.now.sh",
   "version": 2,
   "builds": [{
     "src": "index.js",
-    "use":"@now/node",
-    "config": {"maxLambdaSize": "50mb"}
+    "use":"@now/node@0.4.28",
+    "config": {"maxLambdaSize": "25mb"}
   }],
   "routes": [
     {
